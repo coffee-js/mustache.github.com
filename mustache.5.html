@@ -62,12 +62,12 @@
   <li class='tr'>mustache(5)</li>
 </ol>
 
-<h2 id='NAME'>NAME</h2>
-<p><code>mustache</code> -- Logic-less templates.</p>
+<h2 id='NAME'>名称(NAME)</h2>
+<p><code>mustache</code> -- 轻逻辑模版语言。</p>
 
-<h2>SYNOPSIS</h2>
+<h2>大纲(SYNOPSIS)</h2>
 
-<p>A typical Mustache template:</p>
+<p>一个典型的Mustache模版实例：</p>
 
 <pre><code>Hello {{name}}
 You have just won ${{value}}!
@@ -76,7 +76,7 @@ Well, ${{taxed_value}}, after taxes.
 {{/in_ca}}
 </code></pre>
 
-<p>Given the following hash:</p>
+<p>绑定以下键值的集合：</p>
 
 <pre><code>{
   "name": "Chris",
@@ -86,47 +86,34 @@ Well, ${{taxed_value}}, after taxes.
 }
 </code></pre>
 
-<p>Will produce the following:</p>
+<p>会生成:</p>
 
 <pre><code>Hello Chris
 You have just won $10000!
 Well, $6000.0, after taxes.
 </code></pre>
 
-<h2>DESCRIPTION</h2>
+<h2>简介(DESCRIPTION)</h2>
 
-<p>Mustache can be used for HTML, config files, source code -
-anything. It works by expanding tags in a template using values
-provided in a hash or object.</p>
+<p>Mustache 可以用于HTML，配置文件、程序代码等，核心机制就是把模版中的tags替换为通过hash or object给定的值。</p>
 
-<p>We call it "logic-less" because there are no if statements, else
-clauses, or for loops. Instead there are only tags. Some tags are
-replaced with a value, some nothing, and others a series of
-values. This document explains the different types of Mustache tags.</p>
+<p>我们称之为“轻逻辑”是因为模版语言中没有if、else 和 for循环，只有tags。一些tags会被替换为一个值，还有一些会被替换为一列值。本本会介绍Mustache不同种类的tags.</p>
 
-<h2>TAG TYPES</h2>
+<h2>TAG的种类(TAG TYPES)</h2>
 
-<p>Tags are indicated by the double mustaches. <code>{{person}}</code> is a tag, as
-is <code>{{#person}}</code>. In both examples, we'd refer to <code>person</code> as the key
-or tag key. Let's talk about the different types of tags.</p>
+<p>Tags用双尖括号标记，<code>{{person}}</code>就是一个tag，<code>{{#person}}</code>也是。在所有示例中，我们都将用<code>person</code>作为属性名或tag的名称。下面开始介绍不通种类的tags.</p>
 
-<h3>Variables</h3>
+<h3>变量(Variables)</h3>
 
-<p>The most basic tag type is the variable. A <code>{{name}}</code> tag in a basic
-template will try to find the <code>name</code> key in the current context. If
-there is no <code>name</code> key, nothing will be rendered.</p>
+<p>最基础的tag就是变量。模版中的tag <code>{{name}}</code>会在当前上下文中匹配名为<code>name</code>的值。如果没有找到，就不会输出。</p>
 
-<p>All variables are HTML escaped by default. If you want to return
-unescaped HTML, use the triple mustache: <code>{{{name}}}</code>.</p>
+<p>所有值的输出默认是经过HTML编码的。如果想输出原文，可以使用三重尖括号的标记：<code>{{{name}}}。</code></p>
 
-<p>You can also use <code>&amp;</code> to unescape a variable: <code>{{&amp; name}}</code>. This may be
-useful when changing delimiters (see "Set Delimiter" below).</p>
+<p>也可以使用 <code>&amp;</code> 来标记原文输出：<code>{{&amp; name}}</code>。这种方式在changing delimiters的时候可能有用(see “Set Delimiter” below)。</p>
 
-<p>By default a variable "miss" returns an empty string. This can usually
-be configured in your Mustache library. The Ruby version of Mustache
-supports raising an exception in this situation, for instance.</p>
+<p>如果匹配某个值失败会返回一个空字符串。Ruby版本的Mustache在这种情况下可以抛出异常，例如：</p>
 
-<p>Template:</p>
+<p>模版:</p>
 
 <pre><code>* {{name}}
 * {{age}}
@@ -134,7 +121,7 @@ supports raising an exception in this situation, for instance.</p>
 * {{{company}}}
 </code></pre>
 
-<p>Hash:</p>
+<p>键值:</p>
 
 <pre><code>{
   "name": "Chris",
@@ -142,7 +129,7 @@ supports raising an exception in this situation, for instance.</p>
 }
 </code></pre>
 
-<p>Output:</p>
+<p>输出:</p>
 
 <pre><code>* Chris
 *
@@ -155,17 +142,16 @@ supports raising an exception in this situation, for instance.</p>
 <p>Sections render blocks of text one or more times, depending on the
 value of the key in the current context.</p>
 
-<p>A section begins with a pound and ends with a slash. That is,
-<code>{{#person}}</code> begins a "person" section while <code>{{/person}}</code> ends it.</p>
+<p>Sections可以根据当前上下文中的键值来渲染文本块一次或更多次，Sections以<code>#</code>开始、以<code>/</code>结束，比如<code>{{#person}}…{{/person}}</code>。
+</p>
 
-<p>The behavior of the section is determined by the value of the key.</p>
+<p>Sections的行为由给定的键值决定</p>
 
-<p><strong>False Values or Empty Lists</strong></p>
+<p><strong>False 或 空列表</strong></p>
 
-<p>If the <code>person</code> key exists and has a value of false or an empty
-list, the HTML between the pound and slash will not be displayed.</p>
+<p>如果名为<code>person</code>的值为false或为空，Sections将不会输出任何字符。</p>
 
-<p>Template:</p>
+<p>模版:</p>
 
 <pre><code>Shown.
 {{#nothin}}
@@ -173,36 +159,32 @@ list, the HTML between the pound and slash will not be displayed.</p>
 {{/nothin}}
 </code></pre>
 
-<p>Hash:</p>
+<p>键值:</p>
 
 <pre><code>{
   "person": true,
 }
 </code></pre>
 
-<p>Output:</p>
+<p>输出:</p>
 
 <pre><code>Shown.
 </code></pre>
 
-<p><strong>Non-Empty Lists</strong></p>
+<p><strong>非空的列表</strong></p>
 
-<p>If the <code>person</code> key exists and has a non-false value, the HTML between
-the pound and slash will be rendered and displayed one or more times.</p>
+<p>如果名为<code>person</code>的值不为false，Sections内部的字符将会输出一次或多次。</p>
 
-<p>When the value is a non-empty list, the text in the block will be
-displayed once for each item in the list. The context of the block
-will be set to the current item for each iteration. In this way we can
-loop over collections.</p>
+<p>当值是为空的列表时，与列表中的每个条目对应的字符都会显示出来。每次迭代的时候上下文会从区块切换到对应的没一个条目，这样我们就可以遍历一个集合了。</p>
 
-<p>Template:</p>
+<p>模版:</p>
 
 <pre><code>{{#repo}}
   &lt;b&gt;{{name}}&lt;/b&gt;
 {{/repo}}
 </code></pre>
 
-<p>Hash:</p>
+<p>键值:</p>
 
 <pre><code>{
   "repo": [
@@ -213,7 +195,7 @@ loop over collections.</p>
 }
 </code></pre>
 
-<p>Output:</p>
+<p>输出:</p>
 
 <pre><code>&lt;b&gt;resque&lt;/b&gt;
 &lt;b&gt;hub&lt;/b&gt;
@@ -222,20 +204,17 @@ loop over collections.</p>
 
 <p><strong>Lambdas</strong></p>
 
-<p>When the value is a callable object, such as a function or lambda, the
-object will be invoked and passed the block of text. The text passed
-is the literal block, unrendered. <code>{{tags}}</code> will not have been expanded
-- the lambda should do that on its own. In this way you can implement
-filters or caching.</p>
+<p>当给定的值为object，例如 「function」 或 lambda, object会被调用并传进区块。被传递进区块的是未经编译的字符串。. <code>{{tags}}</code> 此时还没有被替换
+- lambda 将自行决定，用这种方式我们可以实现过滤和缓存。</p>
 
-<p>Template:</p>
+<p>模版:</p>
 
 <pre><code>{{#wrapped}}
   {{name}} is awesome.
 {{/wrapped}}
 </code></pre>
 
-<p>Hash:</p>
+<p>键值:</p>
 
 <pre><code>{
   "name": "Willy",
@@ -247,47 +226,43 @@ filters or caching.</p>
 }
 </code></pre>
 
-<p>Output:</p>
+<p>输出:</p>
 
 <pre><code>&lt;b&gt;Willy is awesome.&lt;/b&gt;
 </code></pre>
 
-<p><strong>Non-False Values</strong></p>
+<p><strong>非False的值</strong></p>
 
-<p>When the value is non-false but not a list, it will be used as the
-context for a single rendering of the block.</p>
+<p>一个不是列表并且不为空的值，会被用来进行单一的渲染。</p>
 
-<p>Template:</p>
+<p>模版:</p>
 
 <pre><code>{{#person?}}
   Hi {{name}}!
 {{/person?}}
 </code></pre>
 
-<p>Hash:</p>
+<p>键值:</p>
 
 <pre><code>{
   "person?": { "name": "Jon" }
 }
 </code></pre>
 
-<p>Output:</p>
+<p>输出:</p>
 
 <pre><code>Hi Jon!
 </code></pre>
 
-<h3>Inverted Sections</h3>
+<h3>反向的Sections(Inverted Sections)</h3>
 
-<p>An inverted section begins with a caret (hat) and ends with a
-slash. That is <code>{{^person}}</code> begins a "person" inverted section while
-<code>{{/person}}</code> ends it.</p>
+<p>反向的区块以「^」开始、以「/」结束，比如 <code>{{^person}}…{{/person}}</code></p>
 
 <p>While sections can be used to render text one or more times based on the
 value of the key, inverted sections may render text once based
-on the inverse value of the key. That is, they will be rendered
-if the key doesn't exist, is false, or is an empty list.</p>
+on the inverse value of the key. 当给定的值不存在、为空或false的时候，反向的区块会被渲染。</p>
 
-<p>Template:</p>
+<p>模版:</p>
 
 <pre><code>{{#repo}}
   &lt;b&gt;{{name}}&lt;/b&gt;
@@ -297,57 +272,53 @@ if the key doesn't exist, is false, or is an empty list.</p>
 {{/repo}}
 </code></pre>
 
-<p>Hash:</p>
+<p>键值:</p>
 
 <pre><code>{
   "repo": []
 }
 </code></pre>
 
-<p>Output:</p>
+<p>输出:</p>
 
 <pre><code>No repos :(
 </code></pre>
 
-<h3>Comments</h3>
+<h3>注释</h3>
 
-<p>Comments begin with a bang and are ignored. The following template:</p>
+<p>以「!」开始的注释文字将会被忽略:</p>
 
 <pre><code>&lt;h1&gt;Today{{! ignore me }}.&lt;/h1&gt;
 </code></pre>
 
-<p>Will render as follows:</p>
+<p>会被渲染成:</p>
 
 <pre><code>&lt;h1&gt;Today.&lt;/h1&gt;
 </code></pre>
 
-<p>Comments may contain newlines.</p>
+<p>注释可以换行。</p>
 
-<h3>Partials</h3>
+<h3>子模版</h3>
 
-<p>Partials begin with a greater than sign, like <code>{{&gt; box}}</code>.</p>
+<p>子模版以「>」标记开始，比如 <code>{{&gt; box}}</code>.</p>
 
-<p>Partials are rendered at runtime (as opposed to compile time), so
-recursive partials are possible. Just avoid infinite loops.</p>
+<p>子模版的渲染是即时的，所以对子模版的递归是可行的，避免了无尽的循环。</p>
 
-<p>They also inherit the calling context. Whereas in ERB you may have
-this:</p>
+<p>子模版还会集成调用的长下文，在 ERB 你可能见过这种code:</p>
 
 <pre><code>&lt;%= partial :next_more, :start =&gt; start, :size =&gt; size %&gt;
 </code></pre>
 
-<p>Mustache requires only this:</p>
+<p>Mustache 只需要:</p>
 
 <pre><code>{{&gt; next_more}}
 </code></pre>
 
-<p>Why? Because the <code>next_more.mustache</code> file will inherit the <code>size</code> and
-<code>start</code> methods from the calling context.</p>
+<p>因为<code>next_more.mustache</code> 会继承调用时上下文的<code>size</code>和<code>start</code>方法.</p>
 
-<p>In this way you may want to think of partials as includes, or template
-expansion, even though it's not literally true.</p>
+<p>也许你会发现子模版和 includes、template扩展很像，尽管和字面上的描述不太一致。</p>
 
-<p>For example, this template and partial:</p>
+<p>例如，如下的模版和子模版:</p>
 
 <pre><code>base.mustache:
 &lt;h2&gt;Names&lt;/h2&gt;
@@ -359,7 +330,7 @@ user.mustache:
 &lt;strong&gt;{{name}}&lt;/strong&gt;
 </code></pre>
 
-<p>Can be thought of as a single, expanded template:</p>
+<p>可以认为看成一个合成的模版:</p>
 
 <pre><code>&lt;h2&gt;Names&lt;/h2&gt;
 {{#names}}
@@ -367,10 +338,9 @@ user.mustache:
 {{/names}}
 </code></pre>
 
-<h3>Set Delimiter</h3>
+<h3>设置分隔符</h3>
 
-<p>Set Delimiter tags start with an equal sign and change the tag
-delimiters from <code>{{</code> and <code>}}</code> to custom strings.</p>
+<p>以「=」开始的tag 可以标记 <code>{{</code> 和 <code>}}</code> 中间的字符为自定义字符。.</p>
 
 <p>Consider the following contrived example:</p>
 
@@ -386,11 +356,11 @@ tag style, the second uses erb style as defined by the Set Delimiter
 tag, and the third returns to the default style after yet another Set
 Delimiter declaration.</p>
 
-<p>According to <a href="http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html">ctemplates</a>, this "is useful for languages like TeX, where
+<p>引自 <a href="http://google-ctemplate.googlecode.com/svn/trunk/doc/howto.html">ctemplates</a>, this "is useful for languages like TeX, where
 double-braces may occur in the text and are awkward to use for
 markup."</p>
 
-<p>Custom delimiters may not contain whitespace or the equals sign.</p>
+<p>自定义字符不能包含空格和等号。</p>
 
 <h2>COPYRIGHT</h2>
 
